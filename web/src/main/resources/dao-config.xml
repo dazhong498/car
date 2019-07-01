@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
-	 xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/context
@@ -15,10 +15,9 @@
 	<aop:aspectj-autoproxy />
 	<aop:config proxy-target-class="true" />
 	<context:annotation-config />
-	<context:component-scan
-		base-package="by.pvt" />
+	<context:component-scan base-package="by.pvt" />
 
-<tx:annotation-driven />
+	<tx:annotation-driven />
 	<!--class class specifies the path to the settings -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -47,6 +46,12 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 
+	<bean id="flyway" class="org.flywaydb.core.Flyway"
+		init-method="migrate">
+		<property name="locations" value="classpath:/flyway"></property>
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="baselineOnMigrate" value="true"></property>
+	</bean>
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
